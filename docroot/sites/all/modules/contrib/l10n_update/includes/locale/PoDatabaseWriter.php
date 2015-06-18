@@ -232,12 +232,14 @@ class PoDatabaseWriter implements PoWriterInterface {
     $context = $item->getContext();
     $source = $item->getSource();
     $translation = $item->getTranslation();
+    $textgroup = $item->getTextgroup();
 
     // Look up the source string and any existing translation.
     $strings = $this->storage->getTranslations(array(
       'language' => $this->_langcode,
       'source' => $source,
-      'context' => $context
+      'context' => $context,
+      'textgroup' => $textgroup,
     ));
     $string = reset($strings);
 
@@ -270,7 +272,7 @@ class PoDatabaseWriter implements PoWriterInterface {
       }
       else {
         // No such source string in the database yet.
-        $string = $this->storage->createString(array('source' => $source, 'context' => $context))
+        $string = $this->storage->createString(array('source' => $source, 'context' => $context, 'textgroup' => $textgroup))
           ->save();
         $target = $this->storage->createTranslation(array(
           'lid' => $string->getId(),

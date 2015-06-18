@@ -63,8 +63,9 @@ function l10n_update_status_form() {
             $local = isset($project_info->files[L10N_UPDATE_LOCAL]) ? $project_info->files[L10N_UPDATE_LOCAL] : NULL;
             $remote = isset($project_info->files[L10N_UPDATE_REMOTE]) ? $project_info->files[L10N_UPDATE_REMOTE] : NULL;
             $recent = _l10n_update_source_compare($local, $remote) == L10N_UPDATE_SOURCE_COMPARE_LT ? $remote : $local;
+            $name = isset($project_data[$project_info->name]->info['name']) ? $project_data[$project_info->name]->info['name'] : '';
             $updates[$langcode]['updates'][] = array(
-              'name' => $project_info->name == 'drupal' ? t('Drupal core') : $project_data[$project_info->name]->info['name'],
+              'name' => $project_info->name == 'drupal' ? t('Drupal core') : $name,
               'version' => $project_info->version,
               'timestamp' => $recent->timestamp,
             );
@@ -270,7 +271,14 @@ function l10n_update_admin_settings_form($form, &$form_state) {
  */
 function l10n_update_admin_settings_form_validate($form, &$form_state) {
   // Check for existing translations directory and create one if required.
+  // When using local sources, only check if the directory exists.
   $directory = $form_state['values']['l10n_update_download_store'];
+  $directory = rtrim($directory, '/\\');
+
+  if ($form_state['values']['l10n_update_check_mode'] == L10N_UPDATE_USE_SOURCE_LOCAL
+    && is_dir($directory)) {
+    return;
+  }
   if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
     form_set_error('l10n_update_download_store', t('The directory %directory does not exist or is not writable.', array('%directory' => $directory)));
     watchdog('file system', 'The directory %directory does not exist or is not writable.', array('%directory' => $directory), WATCHDOG_ERROR);

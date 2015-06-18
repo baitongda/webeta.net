@@ -35,7 +35,7 @@ class L10nUpdateInterfaceTest extends L10nUpdateTestBase {
     module_enable(array('l10n_update_test_translate'));
 
     // No language added.
-    // Check status page and Available translation updates page.
+    // Check status page and Translate interface update page.
     $this->drupalGet('admin/reports/status');
     $this->assertNoText(t('Translation update status'), 'No status message');
 
@@ -67,7 +67,7 @@ class L10nUpdateInterfaceTest extends L10nUpdateTestBase {
     // Check if updates are available for German.
     $this->drupalGet('admin/reports/status');
     $this->assertText(t('Translation update status'), 'Status message');
-    $this->assertRaw(t('Updates available for: @languages. See the <a href="@updates">Available translation updates</a> page for more information.', array('@languages' => t('German'), '@updates' => url('admin/config/regional/translate/update'))), 'Updates available message');
+    $this->assertRaw(t('Updates available for: @languages. See the <a href="@updates">Translate interface update</a> page for more information.', array('@languages' => t('German'), '@updates' => url('admin/config/regional/translate/update'))), 'Updates available message');
     $this->drupalGet('admin/config/regional/translate/update');
     $this->assertText(t('Updates for: @modules', array('@modules' => 'Localization Update test translate')), 'Translations avaiable');
 
@@ -81,7 +81,7 @@ class L10nUpdateInterfaceTest extends L10nUpdateTestBase {
     // Check if no updates were found.
     $this->drupalGet('admin/reports/status');
     $this->assertText(t('Translation update status'), 'Status message');
-    $this->assertRaw(t('Missing translations for: @languages. See the <a href="@updates">Available translation updates</a> page for more information.', array('@languages' => t('German'), '@updates' => url('admin/config/regional/translate/update'))), 'Missing translations message');
+    $this->assertRaw(t('Missing translations for: @languages. See the <a href="@updates">Translate interface update</a> page for more information.', array('@languages' => t('German'), '@updates' => url('admin/config/regional/translate/update'))), 'Missing translations message');
     $this->drupalGet('admin/config/regional/translate/update');
     $this->assertText(t('Missing translations for one project'), 'No translations found');
     $this->assertText(t('@module (@version).', array('@module' => 'Localization Update test translate', '@version' => '1.3-dev')), 'Release details');

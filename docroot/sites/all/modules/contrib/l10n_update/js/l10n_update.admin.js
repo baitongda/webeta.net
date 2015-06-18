@@ -1,7 +1,7 @@
 (function ($) {
 
 /**
- * Show/hide the description details on Available translation updates page.
+ * Show/hide the description details on Translate interface update page.
  */
 Drupal.behaviors.hideUpdateInformation = {
   attach: function (context, settings) {

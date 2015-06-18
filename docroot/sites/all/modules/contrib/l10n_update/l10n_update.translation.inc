@@ -169,7 +169,7 @@ function l10n_update_source_check_file($source) {
   if (isset($source->files[L10N_UPDATE_LOCAL])) {
     $source_file = $source->files[L10N_UPDATE_LOCAL];
     $directory = $source_file->directory;
-    $filename = '/' . preg_quote($source_file->filename) . '$/';
+    $filename = '/^' . preg_quote($source_file->filename) . '$/';
 
     if ($files = file_scan_directory($directory, $filename, array('key' => 'name', 'recurse' => FALSE))) {
       $file = current($files);

@@ -38,13 +38,6 @@ function l10n_update_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'l10n_server' => array(
-        'description' => 'Localization server for this project.',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => TRUE,
-        'default' => '',
-      ),
       'l10n_path' => array(
         'description' => 'Server path this project updates.',
         'type' => 'varchar',
@@ -136,9 +129,6 @@ function l10n_update_schema() {
     'primary key' => array('project', 'language'),
   );
 
-  $schema['cache_l10n_update'] = drupal_get_schema_unprocessed('system', 'cache');
-  $schema['cache_l10n_update']['description'] = 'Cache table for the Localization Update module to store information about available releases, fetched from central server.';
-
   return $schema;
 }
 
@@ -226,7 +216,7 @@ function l10n_update_requirements($phase) {
               'title' => 'Translation update status',
               'value' => l(t('Updates available'), 'admin/config/regional/translate/update'),
               'severity' => REQUIREMENT_WARNING,
-              'description' => t('Updates available for: @languages. See the <a href="!updates">Available translation updates</a> page for more information.', array('@languages' => implode(', ', $available_updates), '!updates' => url('admin/config/regional/translate/update'))),
+              'description' => t('Updates available for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array('@languages' => implode(', ', $available_updates), '!updates' => url('admin/config/regional/translate/update'))),
             );
           }
           else {
@@ -234,7 +224,7 @@ function l10n_update_requirements($phase) {
               'title' => 'Translation update status',
               'value' => t('Missing translations'),
               'severity' => REQUIREMENT_INFO,
-              'description' => t('Missing translations for: @languages. See the <a href="!updates">Available translation updates</a> page for more information.', array('@languages' => implode(', ', $untranslated), '!updates' => url('admin/config/regional/translate/update'))),
+              'description' => t('Missing translations for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array('@languages' => implode(', ', $untranslated), '!updates' => url('admin/config/regional/translate/update'))),
             );
           }
         }
@@ -251,7 +241,7 @@ function l10n_update_requirements($phase) {
           'title' => 'Translation update status',
           'value' => l(t('Can not determine status'), 'admin/config/regional/translate/update'),
           'severity' => REQUIREMENT_WARNING,
-          'description' => t('No translation status is available. See the <a href="!updates">Available translation updates</a> page for more information.', array('!updates' => url('admin/config/regional/translate/update'))),
+          'description' => t('No translation status is available. See the <a href="!updates">Translate interface update</a> page for more information.', array('!updates' => url('admin/config/regional/translate/update'))),
         );
       }
     }
@@ -301,11 +291,7 @@ function l10n_update_update_7003() {
  * Create {cache_l10n_update} table.
  */
 function l10n_update_update_7004() {
-  if (!db_table_exists('cache_l10n_update')) {
-    $schema = drupal_get_schema_unprocessed('system', 'cache');
-    $schema['description'] = 'Cache table for the Localization Update module to store information about available releases, fetched from central server.';
-    db_create_table('cache_l10n_update', $schema);
-  }
+  // Code removed. Table {cache_l10n_update} is no longer used.
 }
 
 /**
@@ -361,5 +347,23 @@ function l10n_update_update_7200() {
 function l10n_update_update_7201() {
   if (!variable_get('l10n_update_download_store', '')) {
    variable_set('l10n_update_download_store', 'sites/all/translations');
+  }
+}
+
+/**
+ * Removes table {cache_l10n_update}.
+ */
+function l10n_update_update_7202() {
+  if (db_table_exists('cache_l10n_update')) {
+    db_drop_table('cache_l10n_update');
+  }
+}
+
+/**
+ * Removes the field 'l10n_server' from table {cache_l10n_update}.
+ */
+function l10n_update_update_7203() {
+  if (db_field_exists('l10n_update_project', 'l10n_server')) {
+    db_drop_field('l10n_update_project', 'l10n_server');
   }
 }

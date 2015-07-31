@@ -11,7 +11,7 @@ function ninghao_navbar_page_build(&$page){
     [
       'group' => CSS_THEME,
       'media' =>'all',
-      'weight' => 1000
+      'weight' => 1001
 
       ]);
   }

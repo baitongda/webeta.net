@@ -1,0 +1,11 @@
+name = Actions permissions (VBO)
+description = Provides permission-based access control for actions. Used by Views Bulk Operations.
+package = Administration
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2015-07-16
+version = "7.x-3.3+1-dev"
+core = "7.x"
+project = "views_bulk_operations"
+datestamp = "1437034442"
+
